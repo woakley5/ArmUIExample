@@ -19,11 +19,11 @@ function rotationScene() {
   this.homeButton = new HomeButton(homeAction);
   this.addActor(this.homeButton);
   
-  this.nextButton = new NextButton(moveToScene4);
-  this.addActor(this.nextButton);
+  /*this.nextButton = new NextButton(moveToScene4);
+  this.addActor(this.nextButton);*/
   
   //Creating and adding the title text
-  this.title = new Label(windowWidth/2, windowHeight*0.16, "Rotation Control", {size:70, leading:50});
+  this.title = new Label(windowWidth/2, windowHeight*0.16, "Full Control", {size:70, leading:50});
   this.addActor(this.title);
   
   /////////////////////////////// BUTTONS /////////////////////////////////
@@ -33,7 +33,7 @@ function rotationScene() {
   
   this.moveButton = new TextButton(
 									windowWidth*0.8 - 100,
-									windowHeight*0.5,
+									windowHeight*0.5 - 100,
 									200,
 									100,
 									BLUE,
@@ -43,10 +43,58 @@ function rotationScene() {
 									'rect'); 
   this.addActor(this.moveButton);
   
+  this.upButton = new TextButton(
+									windowWidth*0.1,
+									windowHeight*0.5 + 100,
+									200,
+									100,
+									BLUE,
+									"Arm Up",
+									attrs,
+									this.moveArmUp.bind(this),
+									'rect'); 
+  this.addActor(this.upButton);
+  
+  this.downButton = new TextButton(
+									windowWidth*0.3,
+									windowHeight*0.5 + 100,
+									200,
+									100,
+									BLUE,
+									"Arm Down",
+									attrs,
+									this.moveArmDown.bind(this),
+									'rect'); 
+  this.addActor(this.downButton);
+  
+  this.magnetOn = new TextButton(
+									windowWidth*0.5,
+									windowHeight*0.5 + 100,
+									200,
+									100,
+									BLUE,
+									"Magnet On",
+									attrs,
+									this.turnElectromagnetOn.bind(this),
+									'rect'); 
+  this.addActor(this.magnetOn);
+  
+  this.magnetOff = new TextButton(
+									windowWidth*0.7,
+									windowHeight*0.5 + 100,
+									200,
+									100,
+									BLUE,
+									"Magnet Off",
+									attrs,
+									this.turnElectromagnetOff.bind(this),
+									'rect'); 
+  this.addActor(this.magnetOff);
+  
   /////////////////////////////// LABELS /////////////////////////////////
 
   this.sliderLabel = new Label(windowWidth*0.15 + 35,
-								windowHeight*0.5 - 150,
+								windowHeight*0.5 - 200,
 								"0",
 								attrs,
 								200,
@@ -60,7 +108,7 @@ function rotationScene() {
   var fixedSliderSize = windowWidth*0.5; 
   this.fixedPositionSlider =  new Slider(
                            windowWidth*0.15, // x position
-                           windowHeight*0.5, // y position
+                           windowHeight*0.5 - 100, // y position
                            fixedSliderSize, // size of slider
                            0, // min value of slider
                            100, // max value of slider
@@ -101,6 +149,23 @@ rotationScene.prototype.fixedChangePosition = function(slidePosition) {
 
 rotationScene.prototype.moveArm = function() {
   ARM.master.events.moveArm();
+  //stage.pause();
+}
+
+rotationScene.prototype.moveArmUp = function() {
+  ARM.master.events.raiseArm();
+  //stage.pause();
+}
+rotationScene.prototype.moveArmDown = function() {
+  ARM.master.events.lowerArm();
+  //stage.pause();
+}
+rotationScene.prototype.turnElectromagnetOn = function() {
+  ARM.master.events.enableElectromagnet();
+  //stage.pause();
+}
+rotationScene.prototype.turnElectromagnetOff = function() {
+  ARM.master.events.disableElectromagnet();
   //stage.pause();
 }
 

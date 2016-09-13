@@ -4,7 +4,7 @@
 var floor = Math.floor;
 var stage = new Stage();
 // variables for scenes
-var homeScreen, upDownControlScreen, rotationControlScene, electromagnetControlScene;
+var homeScreen, upDownControlScreen, rotationControlScene, electromagnetControlScene, fullControlScene;
 var manager;
 var attrs;
 var logo;
@@ -21,8 +21,8 @@ function setup() {
 
   initMenuVariables();
   
-  var homeScreenButtonName = ["Lets Go!"];
-  var homeScreenButtonAction = [firstButtonAction]
+  var homeScreenButtonName = ["Welcome!"];
+  var homeScreenButtonAction = [firstButtonAction];
   homeScreen = new ButtonsScene("Arm Machine",
 								null,
 								homeScreenButtonName,
@@ -30,18 +30,8 @@ function setup() {
 								null,
 								null,
 								null,
-								{size:100, leading:50});
+								{size:50, leading:50});
   stage.addScene('homeScreen', homeScreen)
-  
-  var armControlButtonNames = ["Arm Up", "Arm Down"];
-  var armControlButtonActions = [moveArmUp, moveArmDown];
-  upDownControlScreen = new ButtonsScene("Up/Down Control",
-									"Start by controlling the up & down motion of the arm.",
-									armControlButtonNames,
-									armControlButtonActions,
-									homeAction,
-									moveToScene3);
-  stage.addScene('upDownControlScreen', upDownControlScreen);
   
   rotationControlScene = new rotationScene()
   stage.addScene('rotationControlScene', rotationControlScene);
@@ -55,6 +45,7 @@ function setup() {
 												homeAction,
 												null);
    stage.addScene('electromagnetControlScene', electromagnetControlScene);
+   
   
   stage.transitionTo('homeScreen');
 }
@@ -86,7 +77,7 @@ function firstButtonAction()
 {
   console.log("First button pressed");
   manager.changeState(ARM);
-  stage.transitionTo('upDownControlScreen');
+  stage.transitionTo('rotationControlScene');
 }
 
 function moveArmUp(){
