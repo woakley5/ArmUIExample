@@ -1,6 +1,6 @@
 "use strict"; //This causes it to be executed in "strict" mode which prevents some unsafe syntax
 
-function rotationScene() {
+function MotionMachineScene() {
 	
   /////////////////////////////// BASIC SETUP ///////////////////////////////
 	
@@ -37,9 +37,9 @@ function rotationScene() {
 									200,
 									100,
 									BLUE,
-									"MOVE",
+									"Move Home",
 									attrs,
-									this.moveArm.bind(this),
+									this.resetLift.bind(this),
 									'rect'); 
   this.addActor(this.moveButton);
   
@@ -49,9 +49,9 @@ function rotationScene() {
 									200,
 									100,
 									BLUE,
-									"Arm Up",
+									"Lift Up",
 									attrs,
-									this.moveArmUp.bind(this),
+									this.liftUp.bind(this),
 									'rect'); 
   this.addActor(this.upButton);
   
@@ -61,9 +61,9 @@ function rotationScene() {
 									200,
 									100,
 									BLUE,
-									"Arm Down",
+									"Lift Down",
 									attrs,
-									this.moveArmDown.bind(this),
+									this.liftDown.bind(this),
 									'rect'); 
   this.addActor(this.downButton);
   
@@ -73,9 +73,9 @@ function rotationScene() {
 									200,
 									100,
 									BLUE,
-									"Magnet On",
+									"Stairs On",
 									attrs,
-									this.turnElectromagnetOn.bind(this),
+									this.turnStairsOn.bind(this),
 									'rect'); 
   this.addActor(this.magnetOn);
   
@@ -85,43 +85,28 @@ function rotationScene() {
 									200,
 									100,
 									BLUE,
-									"Magnet Off",
+									"Stairs Off",
 									attrs,
-									this.turnElectromagnetOff.bind(this),
+									this.turnStairsOff.bind(this),
 									'rect'); 
   this.addActor(this.magnetOff);
   
   /////////////////////////////// LABELS /////////////////////////////////
 
-  this.sliderLabel = new Label(windowWidth*0.15 + 35,
+  /*this.sliderLabel = new Label(windowWidth*0.15 + 35,
 								windowHeight*0.5 - 200,
 								"0",
 								attrs,
 								200,
 								50);
   this.addActor(this.sliderLabel);
-  
-  //////////////////////// SLIDER FIXED IMPLEMENTATION ////////////////////////
-  
-  // Creates custom slider buttons
-  // function Slider(x pos, y pos, width, min value of slider, max value of slider, default value where the button starts, action) {
-  var fixedSliderSize = windowWidth*0.5; 
-  this.fixedPositionSlider =  new Slider(
-                           windowWidth*0.15, // x position
-                           windowHeight*0.5 - 100, // y position
-                           fixedSliderSize, // size of slider
-                           0, // min value of slider
-                           100, // max value of slider
-                           0, // default value of slider
-  this.fixedChangePosition.bind(this)); // action to call on slider change
-  this.fixedPositionSlider.sliderImage(logo); // "sliderImage" sets the image of the knob of the slider object
-  this.addActor(this.fixedPositionSlider); // adds slider to scene
+  */
 
  ///////////////////////// LOADING SCENE IMPLEMENTATION ///////////////////////////////
  
   //Setting the event handler in manager for the finishedAction event on the tablet
   //All tablet events must be set up like this to link the Arduino call to the actual function
-  manager.setEventHandler(ARM.tablet.events.finishedAction, this.finishedAction.bind(this));
+  manager.setEventHandler(MOTIONMACHINE.tablet.events.finishedAction, this.finishedAction.bind(this));
   
   ////////////////////////////////// TIMEOUT SCENE /////////////////////////////////////
   
@@ -135,52 +120,38 @@ function rotationScene() {
 	
 }
 
-_inherits(rotationScene, Scene); // NECESSARY, DO NOT FORGET - PUT AT END OF CONSTRUCTOR
+_inherits(MotionMachineScene, Scene); // NECESSARY, DO NOT FORGET - PUT AT END OF CONSTRUCTOR
 
 ///////////////////////////////// BUTTON SUB FUNCTIONS /////////////////////////////////
 
 
 // Changes the value "railPosition" on the arduino side in reaction to the slider changing
-rotationScene.prototype.fixedChangePosition = function(slidePosition) {
-  console.log("Curret value of Fslider is " + slidePosition);
-  manager.change(ARM.master.values.rotations, slidePosition);
-  if(slidePosition/100 == 0.24)
-  {
-  	this.sliderLabel.text = slidePosition/100 + " rotations (Tall Tower)";
-  }
-  else if(slidePosition/100 == 0.41)
-  {
-  	this.sliderLabel.text = slidePosition/100 + " rotations (Short Tower)";
-  }
-  else{
-  	this.sliderLabel.text = slidePosition/100 + " rotations";
-  }
-}
 
-rotationScene.prototype.moveArm = function() {
-  ARM.master.events.moveArm();
+
+MotionMachineScene.prototype.resetLift = function() {
+  MOTIONMACHINE.master.events.setLiftToZero();
   //stage.pause();
 }
 
-rotationScene.prototype.moveArmUp = function() {
-  ARM.master.events.raiseArm();
+MotionMachineScene.prototype.liftUp = function() {
+  MOTIONMACHINE.master.events.moveLiftUp();
   //stage.pause();
 }
-rotationScene.prototype.moveArmDown = function() {
-  ARM.master.events.lowerArm();
+MotionMachineScene.prototype.liftDown = function() {
+  MOTIONMACHINE.master.events.moveToBottom();
   //stage.pause();
 }
-rotationScene.prototype.turnElectromagnetOn = function() {
-  ARM.master.events.enableElectromagnet();
+MotionMachineScene.prototype.turnStairsOn = function() {
+  MOTIONMACHINE.master.events.runSteps();
   //stage.pause();
 }
-rotationScene.prototype.turnElectromagnetOff = function() {
-  ARM.master.events.disableElectromagnet();
+MotionMachineScene.prototype.turnStairsOff = function() {
+  MOTIONMACHINE.master.events.stopSteps();
   //stage.pause();
 }
 
 //This happens when the tablet event finishedAction() is called by the Arduino
 //It simply resumes the scene
-rotationScene.prototype.finishedAction = function(){
+MotionMachineScene.prototype.finishedAction = function(){
   stage.resume();
 }

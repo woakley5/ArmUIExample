@@ -4,7 +4,7 @@
 var floor = Math.floor;
 var stage = new Stage();
 // variables for scenes
-var homeScreen, upDownControlScreen, rotationControlScene, electromagnetControlScene, fullControlScene;
+var homeScreen, rotationControlScene, machineControlScene;
 var manager;
 var attrs;
 var logo;
@@ -21,10 +21,10 @@ function setup() {
 
   initMenuVariables();
   
-  var homeScreenButtonName = ["Welcome!"];
-  var homeScreenButtonAction = [firstButtonAction];
-  homeScreen = new ButtonsScene("Arm Machine",
-								null,
+  var homeScreenButtonName = ["Arm", "Other One"];
+  var homeScreenButtonAction = [firstButtonAction, secondButtonAction];
+  homeScreen = new ButtonsScene("Machines!!!",
+								"These machines do nothing!!",
 								homeScreenButtonName,
 								homeScreenButtonAction,
 								null,
@@ -36,15 +36,8 @@ function setup() {
   rotationControlScene = new rotationScene()
   stage.addScene('rotationControlScene', rotationControlScene);
   
-  var electromagnetScreenButtonNames = ["Magnet On", "Magnet Off"];
-  var electromagnetScreenButtonActions = [electromagnetOn, electromagnetOff];
-  electromagnetControlScene = new ButtonsScene("Electromagnet Control",
-												"Now lets try using the electromagnet.",
-												electromagnetScreenButtonNames,
-												electromagnetScreenButtonActions,
-												homeAction,
-												null);
-   stage.addScene('electromagnetControlScene', electromagnetControlScene);
+  machineControlScene = new MotionMachineScene();
+  stage.addScene('machineControlScene', machineControlScene);
    
   
   stage.transitionTo('homeScreen');
@@ -77,27 +70,19 @@ function firstButtonAction()
 {
   console.log("First button pressed");
   manager.changeState(ARM);
+  ARM.master.events.resetArmPosition();
   stage.transitionTo('rotationControlScene');
 }
 
-function moveArmUp(){
-	console.log("Arm Up pressed");
-	ARM.master.events.raiseArm();
+function secondButtonAction()
+{
+  console.log("Second button pressed");
+  manager.changeState(MOTIONMACHINE);
+  stage.transitionTo('machineControlScene');
 }
 
-function moveArmDown(){
-	console.log("Arm Down pressed");
-	ARM.master.events.lowerArm();
 
-}
 
-function electromagnetOn(){
-	ARM.master.events.enableElectromagnet();
-}
-
-function electromagnetOff(){
-	ARM.master.events.disableElectromagnet();
-}
 
 
 // all these are needed to handle touch/mouse events properly
