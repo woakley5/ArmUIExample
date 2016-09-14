@@ -4,7 +4,7 @@
 var floor = Math.floor;
 var stage = new Stage();
 // variables for scenes
-var homeScreen, armControlScene, machineControlScene;
+var welcomeScreen, directionsScreen, homeScreen, armControlScene, machineControlScene;
 var manager;
 var attrs;
 var logo;
@@ -13,16 +13,19 @@ function preload() {
 	logo = loadImage("/ArmUIExample/miles.png");
 }
 
-
-
-
 function setup() {
   resizeCanvas(windowWidth, windowHeight);
 
   initMenuVariables();
-  
-  var homeScreenButtonName = ["Arm", "Other One"];
-  var homeScreenButtonAction = [firstButtonAction, secondButtonAction];
+
+	welcomeScreen = new ConsoleOpeningScene(moveToDirectionsScene);
+	stage.addScene('welcomeScreen', welcomeScreen);
+
+	directionsScreen = new ConsoleInstructionScene(homeAction);
+	stage.addScene('directionsScreen', directionsScreen);
+
+  var homeScreenButtonName = ["Arm", "Other One", "View Instructions"];
+  var homeScreenButtonAction = [movetoArmScene, moveToMotionMachineScene, viewInstructions];
   homeScreen = new ButtonsScene("Machines!!!",
 								"These machines do nothing!!",
 								homeScreenButtonName,
@@ -32,15 +35,19 @@ function setup() {
 								null,
 								{size:50, leading:50});
   stage.addScene('homeScreen', homeScreen)
-  
+
   armControlScene = new ArmScene()
   stage.addScene('armControlScene', armControlScene);
-  
+
   machineControlScene = new MotionMachineScene();
   stage.addScene('machineControlScene', machineControlScene);
-   
-  
-  stage.transitionTo('homeScreen');
+
+
+  stage.transitionTo('welcomeScreen');
+}
+
+function viewInstructions(){
+	stage.transitionTo('directionsScreen');
 }
 
 function draw() {
@@ -52,21 +59,11 @@ function homeAction(){
   //    comm.pause();
 }
 
-function nextAction(){
-  stage.transitionTo('homeScreen');
-  //    comm.pause();
+function moveToDirectionsScene(){
+	stage.transitionTo('directionsScreen');
 }
 
-function moveToScene3(){
-	console.log("Moving to scene 3");
-	stage.transitionTo('rotationControlScene');
-}
-
-function moveToScene4(){
-	stage.transitionTo('electromagnetControlScene');
-}
-
-function firstButtonAction()
+function movetoArmScene()
 {
   console.log("First button pressed");
   manager.changeState(ARM);
@@ -74,7 +71,7 @@ function firstButtonAction()
   stage.transitionTo('armControlScene');
 }
 
-function secondButtonAction()
+function moveToMotionMachineScene()
 {
   console.log("Second button pressed");
   manager.changeState(MOTIONMACHINE);
