@@ -32,7 +32,7 @@ function MotionMachineScene() {
   // function TextButton(x pos, y pos, width, height, bgColor, text, textattrs, action, shape, nudge) {
 
   this.moveButton = new TextButton(
-									windowWidth*0.8 - 100,
+									windowWidth*0.5-100,
 									windowHeight*0.5 - 100,
 									200,
 									100,
