@@ -1,6 +1,6 @@
 "use strict"; //This causes it to be executed in "strict" mode which prevents some unsafe syntax
 
-function rotationScene() {
+function ArmScene() {
 	
   /////////////////////////////// BASIC SETUP ///////////////////////////////
 	
@@ -131,17 +131,17 @@ function rotationScene() {
   // this.timeoutTime = defaultTimeoutTime; change time in miliseconds
   // this.timeoutObject = null; function to call (reset function) when transistioning
   // this.timeoutObject = function() { return stairsOnAction(); }; b/c you dont want to call function - use anon funct
-  console.log("Created rotationScene");
+  console.log("Created ArmScene");
 	
 }
 
-_inherits(rotationScene, Scene); // NECESSARY, DO NOT FORGET - PUT AT END OF CONSTRUCTOR
+_inherits(ArmScene, Scene); // NECESSARY, DO NOT FORGET - PUT AT END OF CONSTRUCTOR
 
 ///////////////////////////////// BUTTON SUB FUNCTIONS /////////////////////////////////
 
 
 // Changes the value "railPosition" on the arduino side in reaction to the slider changing
-rotationScene.prototype.fixedChangePosition = function(slidePosition) {
+  ArmScene.prototype.fixedChangePosition = function(slidePosition) {
   console.log("Curret value of Fslider is " + slidePosition);
   manager.change(ARM.master.values.rotations, slidePosition);
   if(slidePosition/100 == 0.24)
@@ -157,30 +157,30 @@ rotationScene.prototype.fixedChangePosition = function(slidePosition) {
   }
 }
 
-rotationScene.prototype.moveArm = function() {
+ArmScene.prototype.moveArm = function() {
   ARM.master.events.moveArm();
   //stage.pause();
 }
 
-rotationScene.prototype.moveArmUp = function() {
+ArmScene.prototype.moveArmUp = function() {
   ARM.master.events.raiseArm();
   //stage.pause();
 }
-rotationScene.prototype.moveArmDown = function() {
+ArmScene.prototype.moveArmDown = function() {
   ARM.master.events.lowerArm();
   //stage.pause();
 }
-rotationScene.prototype.turnElectromagnetOn = function() {
+ArmScene.prototype.turnElectromagnetOn = function() {
   ARM.master.events.enableElectromagnet();
   //stage.pause();
 }
-rotationScene.prototype.turnElectromagnetOff = function() {
+ArmScene.prototype.turnElectromagnetOff = function() {
   ARM.master.events.disableElectromagnet();
   //stage.pause();
 }
 
 //This happens when the tablet event finishedAction() is called by the Arduino
 //It simply resumes the scene
-rotationScene.prototype.finishedAction = function(){
+ArmScene.prototype.finishedAction = function(){
   stage.resume();
 }

@@ -4,7 +4,7 @@
 var floor = Math.floor;
 var stage = new Stage();
 // variables for scenes
-var homeScreen, rotationControlScene, machineControlScene;
+var homeScreen, armControlScene, machineControlScene;
 var manager;
 var attrs;
 var logo;
@@ -33,8 +33,8 @@ function setup() {
 								{size:50, leading:50});
   stage.addScene('homeScreen', homeScreen)
   
-  rotationControlScene = new rotationScene()
-  stage.addScene('rotationControlScene', rotationControlScene);
+  armControlScene = new ArmScene()
+  stage.addScene('armControlScene', armControlScene);
   
   machineControlScene = new MotionMachineScene();
   stage.addScene('machineControlScene', machineControlScene);
@@ -71,7 +71,7 @@ function firstButtonAction()
   console.log("First button pressed");
   manager.changeState(ARM);
   ARM.master.events.resetArmPosition();
-  stage.transitionTo('rotationControlScene');
+  stage.transitionTo('armControlScene');
 }
 
 function secondButtonAction()
@@ -80,10 +80,6 @@ function secondButtonAction()
   manager.changeState(MOTIONMACHINE);
   stage.transitionTo('machineControlScene');
 }
-
-
-
-
 
 // all these are needed to handle touch/mouse events properly
 window.touchStarted = stage.touchStarted.bind(stage);
